@@ -9,34 +9,28 @@ spec:
     - description: 'Snapshot of the application'
       name: SNAPSHOT
       type: string
+      default: '{"components": [{"name":"test-app", "containerImage": "quay.io/example/repo:latest"}]}'
+
 
     - description: 'Namespace where the application is running'
       name: NAMESPACE
       type: string
+      default: "default"
 
-  tasks:
     - name: icr-scan
+      taskRef:
+       resolver: git
+       params:
+         - name: url
+           value: https://github.com/jaintapauljp/k8s-integration
+         - name: revision
+           value: master
+         - name: pathInRepo
+           value: icr-scan.yaml
+
       params:
         - name: SNAPSHOT
           value: $(params.SNAPSHOT)
 
         - name: NAMESPACE
           value: $(params.NAMESPACE)
-
-      taskSpec:
-        steps:
-          - name: icr-scan
-            image: docker.io/openrefactory/icr-unified-engine:latest
-
-            resources:
-              requests:
-                memory: 50Mi
-                cpu: 1000m
-
-            script: |
-              #!/usr/bin/env bash
-              echo "$(params.SNAPSHOT)"
-              echo "LICENSE_KEY H4DR-MPJY-ZLNJ-XNOR" >> config
-              echo "SARIF /workspaceOR/results/sarif/" >> config
-              echo "GOPATH /workspaceOR/GP/" >> config
-              sh configure_run.sh Go --git_url=$(echo -n $(params.SNAPSHOT) | jq -r .components[0].source.git.url) --commit_hash=$(echo -n $(params.SNAPSHOT) | jq -r .components[0].source.git.revision)

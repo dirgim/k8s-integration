@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: icr-scan
+spec:
+  description: >-
+    Expects an Snapshot deployed.
+  params:
+    - name: SNAPSHOT
+      description: The json string of the Snapshot under test 
+    - default: 'default'
+      name: NAMESPACE
+      description: Namespace of the application under test
+  steps:
+    - image: docker.io/openrefactory/icr-unified-engine:latest
+      
+      resources:
+        requests:
+          memory: 50Mi
+          cpu: 1000m
+
+          
+      env:
+        - name: SNAPSHOT
+          value: $(params.SNAPSHOT)
+        - name: NAMESPACE
+          value: $(params.NAMESPACE)
+      script: |
+        echo -e "${SNAPSHOT}"
+        echo -e "${NAMESPACE}"
