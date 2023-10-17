@@ -19,14 +19,14 @@ spec:
 
     - name: icr-scan
       taskRef:
-       resolver: git
-       params:
-         - name: url
-           value: https://github.com/jaintapauljp/k8s-integration
-         - name: revision
-           value: master
-         - name: pathInRepo
-           value: icr-scan.yaml
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/jaintapauljp/k8s-integration
+          - name: revision
+            value: master
+          - name: pathInRepo
+            value: icr-scan.yaml
 
       params:
         - name: SNAPSHOT
