@@ -35,8 +35,8 @@ spec:
 
             script: |
               #!/usr/bin/env bash
-              echo "${params.SNAPSHOT}"
+              echo "$(params.SNAPSHOT)"
               echo "LICENSE_KEY H4DR-MPJY-ZLNJ-XNOR" >> config
               echo "SARIF /workspaceOR/results/sarif/" >> config
               echo "GOPATH /workspaceOR/GP/" >> config
-              sh configure_run.sh Go --git_url=$(echo -n ${params.SNAPSHOT} | jq -r .components[0].source.git.url) --commit_hash=$(echo -n ${params.SNAPSHOT} | jq -r .components[0].source.git.revision)
+              sh configure_run.sh Go --git_url=$(echo -n $(params.SNAPSHOT) | jq -r .components[0].source.git.url) --commit_hash=$(echo -n $(params.SNAPSHOT) | jq -r .components[0].source.git.revision)
