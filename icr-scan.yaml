@@ -19,12 +19,12 @@ spec:
           memory: 50Mi
           cpu: 1000m
 
-          
       env:
         - name: SNAPSHOT
           value: $(params.SNAPSHOT)
         - name: NAMESPACE
           value: $(params.NAMESPACE)
+
       script: |
         echo -e "${SNAPSHOT}"
         echo -e "${NAMESPACE}"
