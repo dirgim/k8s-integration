@@ -1,0 +1,42 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: icr-pipeline
+spec:
+  description: >-
+    This is an integration pipeline example
+  params:
+    - description: 'Snapshot of the application'
+      name: SNAPSHOT
+      type: string
+
+    - description: 'Namespace where the application is running'
+      name: NAMESPACE
+      type: string
+
+  tasks:
+    - name: icr-scan
+      params:
+        - name: SNAPSHOT
+          value: $(params.SNAPSHOT)
+
+        - name: NAMESPACE
+          value: $(params.NAMESPACE)
+
+      taskSpec:
+        steps:
+          - name: icr-scan
+            image: docker.io/openrefactory/icr-unified-engine:latest
+
+            resources:
+              requests:
+                memory: 50Mi
+                cpu: 1000m
+
+            script: |
+              #!/usr/bin/env bash
+              echo "${params.SNAPSHOT}"
+              echo "LICENSE_KEY H4DR-MPJY-ZLNJ-XNOR" >> config
+              echo "SARIF /workspaceOR/results/sarif/" >> config
+              echo "GOPATH /workspaceOR/GP/" >> config
+              sh configure_run.sh Go --git_url=$(echo -n ${params.SNAPSHOT} | jq -r .components[0].source.git.url) --commit_hash=$(echo -n ${params.SNAPSHOT} | jq -r .components[0].source.git.revision)
