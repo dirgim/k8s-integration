@@ -14,10 +14,10 @@ spec:
   steps:
     - image: docker.io/openrefactory/icr-unified-engine:latest
       
-      resources:
-        requests:
-          memory: 50Mi
-          cpu: 1000m
+      # resources:
+      #   requests:
+      #     memory: 50Mi
+      #     cpu: 1000m
 
       env:
         - name: SNAPSHOT
